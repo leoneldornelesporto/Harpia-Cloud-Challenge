@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:sockets="http://www.mulesoft.org/schema/mule/sockets"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/sockets http://www.mulesoft.org/schema/mule/sockets/current/mule-sockets.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="implementationListInventory" doc:id="914600b8-cb94-429b-90bc-68a61f57fa92" >
+		<wsc:consume doc:name="Consume" doc:id="2c067cda-3ddf-4de1-8b5a-16af0fcda720" config-ref="Web_Service_Consumer_Config" operation="ListInventory"/>
+		<ee:transform doc:name="Transform Message" doc:id="4eccc542-5e0a-44fc-98f0-74ae054f6623" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+ns ns0 http://acme.com/tshirt-service
+---
+{
+	inventory: payload.body.ns0#ListInventoryResponse.*inventory map ( inventory , indexOfInventory ) -> {
+		productCode: inventory.productCode as String default "",
+		size: inventory.size default "",
+		description: inventory.description default "",
+		count: inventory.count as String default ""
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="12a4617c-8d93-45a4-b00f-e7fadec561c6" >
+				<ee:transform doc:name="Transform Message" doc:id="2784fd45-ce25-4ee0-a6cd-2c2c75664893" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": error.description
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+	<flow name="implementationCreateCustomer" doc:id="70c52f11-5b10-4d8c-a418-5feacc8e8528" >
+		<ee:transform doc:name="Transform Message" doc:id="8b151496-1b08-48c0-8654-7be332e4a54c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://acme.com/tshirt-service
+---
+{
+	ns0#CreateCustomer: {
+		customerId: payload.customerId as Number,
+		name: payload.name,
+		email: payload.email,
+		address: payload.address,
+		neighborhood: payload.neighborhood,
+		city: payload.city,
+		stateOrProvince: payload.stateOrProvince,
+		postalCode: payload.postalCode as Number,
+		country: payload.country,
+		phone: payload.phone as Number,
+		title: payload.title,
+		company: payload.company
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<wsc:consume operation="CreateCustomer" doc:name="Consume" doc:id="81b20eac-018d-48ee-98a7-06390b5520fb" config-ref="Web_Service_Consumer_Config" />
+		<ee:transform doc:name="Transform Message" doc:id="5e9df0be-3338-4fbe-a079-305b56c4c1b2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+ns ns0 http://acme.com/tshirt-service
+---
+{
+	customerId: payload.body.ns0#CustomerId.customerId default 0
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<error-handler>
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="609114db-b07b-4cdc-9bbd-9fcad2df4883" >
+				<ee:transform doc:name="Transform Message" doc:id="ba57f3aa-0624-4226-9b0d-dbbefb82fa38" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": error.description
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+	<flow name="implementationTrackOrder" doc:id="7314874e-0756-4382-85b5-158d0efd3b54" >
+		<ee:transform doc:name="Transform Message" doc:id="fdd71af3-8d81-4b8f-b926-111ee82f8a02" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://acme.com/tshirt-service
+---
+{
+	ns0#TrackOrder: {
+		orderId: vars.orderId
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<wsc:consume operation="TrackOrder" doc:name="Consume" doc:id="f42752ee-04f9-421a-b798-da1de0fd9889" config-ref="Web_Service_Consumer_Config" />
+		<ee:transform doc:name="Transform Message" doc:id="f8a39520-bc94-48b2-827a-2c6658915179" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+ns ns0 http://acme.com/tshirt-service
+---
+{
+	orderId: payload.body.ns0#TrackOrderResponse.orderId default 0,
+	status: payload.body.ns0#TrackOrderResponse.status default "",
+	productCode: payload.body.ns0#TrackOrderResponse.productCode default 0,
+	size: payload.body.ns0#TrackOrderResponse.size default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="9f869873-f57f-4740-8c72-72c776572145" >
+				<ee:transform doc:name="Copy_of_Transform Message" doc:id="1da957f5-8949-4729-bb99-ee036b7eb3d6" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": error.description
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>

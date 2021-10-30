@@ -1,0 +1,33 @@
+#%RAML 1.0
+title: Harpia Cloud Challenge
+
+/ListInventory:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+              !include /examples/ListInventory.json
+
+/CreateCustomer:
+  post:
+    body:
+      application/json:
+        examples:
+          input: !include examples/CreateCustomer.json
+    responses:
+      201:
+        body:
+          application/json:
+            example:
+              message:  Customeradded (but not really)
+
+/TrackOrder/{orderId}:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+              !include /examples/TrackOrder.json

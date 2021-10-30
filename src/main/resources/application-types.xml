@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="Inventory" format="json">
+      <types:shape format="weave" example="examples/Inventory.json"><![CDATA[%dw 2.0
+
+type Inventory = {|
+  inventory: Array<{|    productCode: String,     size: String,     description: String,     count: String  |}>
+|} {"example": "{\\\"inventory\\\":[{\\\"productCode\\\":\\\"100\\\",\\\"size\\\":\\\"M\\\",\\\"description\\\":\\\"T-shirt with logo\\\",\\\"count\\\":\\\"100\\\"}]}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="Customer" format="json">
+      <types:shape format="weave" example="examples/CreateCustomer.json"><![CDATA[%dw 2.0
+
+type Customer = {|
+  customerId: String, 
+  name: String, 
+  email: String, 
+  address: String, 
+  neighborhood: String, 
+  city: String, 
+  stateOrProvince: String, 
+  postalCode: String, 
+  country: String, 
+  phone: String, 
+  title: String, 
+  company: String
+|} {"example": "{\\\"customerId\\\":\\\"1\\\",\\\"name\\\":\\\"Leonel\\\",\\\"email\\\":\\\"leoneldornelesporto@outlook.com\\\",\\\"address\\\":\\\"Visconde de Abaete 322\\\",\\\"neighborhood\\\":\\\"N\u00E3o?\\\",\\\"city\\\":\\\"Pelotas\\\",\\\"stateOrProvince\\\":\\\"Rio Grande do Sul\\\",\\\"postalCode\\\":\\\"96075230\\\",\\\"country\\\":\\\"Brasil\\\",\\\"phone\\\":\\\"53991056367\\\",\\\"title\\\":\\\"Programador\\\",\\\"company\\\":\\\"Compasso UOL\\\"}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="CustomerXml" format="xml">
+      <types:example format="xml" element="{http://acme.com/tshirt-service}CreateCustomer" location="examples/CreateCustomer.xml"/>
+    </types:type>
+    <types:type name="TrackOrder" format="xml">
+      <types:example format="xml" element="{http://acme.com/tshirt-service}TrackOrder" location="examples/TrackOrder.xml"/>
+    </types:type>
+    <types:type name="TrackOrdeJson" format="json">
+      <types:shape format="weave" example="examples/TrackOrderResponse.json"><![CDATA[%dw 2.0
+
+type TrackOrdeJson = {|
+  orderId: Number {"typeId": "int"}, 
+  status: String, 
+  productCode: Number {"typeId": "int"}, 
+  size: String
+|} {"example": "{\\\"orderId\\\":1,\\\"status\\\":\\\"String\\\",\\\"productCode\\\":1,\\\"size\\\":\\\"String\\\"}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="CreateCustomerResponse" format="json">
+      <types:shape format="weave" example="examples/CreateCustomerResponse.json"><![CDATA[%dw 2.0
+
+type CreateCustomerResponse = {| customerId: Number {"typeId": "int"} |} {"example": "{\\\"customerId\\\":1}"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#4eccc542-5e0a-44fc-98f0-74ae054f6623">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="Inventory"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#8b151496-1b08-48c0-8654-7be332e4a54c">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="Customer"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="CustomerXml"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#fdd71af3-8d81-4b8f-b926-111ee82f8a02">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="TrackOrder"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#f8a39520-bc94-48b2-827a-2c6658915179">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="TrackOrdeJson"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#5e9df0be-3338-4fbe-a079-305b56c4c1b2">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="CreateCustomerResponse"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

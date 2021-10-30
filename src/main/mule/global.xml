@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
+	<configuration-properties doc:name="Configuration properties" doc:id="4a022c4f-2a83-4a1e-91e5-1921ba02fb26" file="properties.yaml" />
+	<wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="eae87708-7054-4574-9148-72de5597e1e2" >
+		<wsc:connection wsdlLocation="https://tshirt-soap-ws.herokuapp.com/ws/tshirt-service?wsdl" service="TshirtServicePortTypeService" port="TshirtServicePortTypePort"/>
+	</wsc:config>
+</mule>

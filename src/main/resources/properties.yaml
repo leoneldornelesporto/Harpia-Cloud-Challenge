@@ -1,0 +1,4 @@
+heroku:
+  wsdl: "https://tshirt-soap-ws.herokuapp.com/ws/tshirt-service?wsdl"
+  service: "TshirtServicePortTypeService"
+  host: "TshirtServicePortTypeServiceSoapBinding"

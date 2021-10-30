@@ -1,0 +1,20 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tsh="http://acme.com/tshirt-service">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tsh:CreateCustomer>
+         <!--Optional:-->
+         <customerId>7092403174</customerId>
+         <name>Leonel</name>
+         <email>leoneldornelesporto@outlook.com</email>
+         <address>visconde de abaete</address>
+         <neighborhood>s</neighborhood>
+         <city>pelotas</city>
+         <stateOrProvince>Rio Grande do sul</stateOrProvince>
+         <postalCode>96075230</postalCode>
+         <country>Brasil</country>
+         <phone>53991056367</phone>
+         <title>Compasso</title>
+         <company>Compasso</company>
+      </tsh:CreateCustomer>
+   </soapenv:Body>
+</soapenv:Envelope>

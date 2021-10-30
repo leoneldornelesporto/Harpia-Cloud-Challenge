@@ -1,0 +1,28 @@
+{
+    "inventory": [
+        {
+            "productCode": "100",
+            "size": "M",
+            "description": "T-shirt with logo",
+            "count": "100"
+        },
+        {
+            "productCode": "101",
+            "size": "M",
+            "description": "T-shirt with large logo",
+            "count": "100"
+        },
+        {
+            "productCode": "201",
+            "size": "L",
+            "description": "T-shirt with logo",
+            "count": "100"
+        },
+        {
+            "productCode": "202",
+            "size": "L",
+            "description": "T-shirt with medium logo",
+            "count": "100"
+        }
+    ]
+}
