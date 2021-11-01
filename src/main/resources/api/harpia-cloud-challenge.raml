@@ -1,16 +1,25 @@
 #%RAML 1.0
 title: Harpia Cloud Challenge
 
-/ListInventory:
-  get:
+traits:
+  client-id-required:
+    headers:
+      client_id:
+        type: string
+      client_secret:
+        type: string
     responses:
-      200:
-        body:
-          application/json:
-            example:
-              !include /examples/ListInventory.json
+      401:
+        description: Unauthorizred, The client_id or client_secret are not valid or the client does not have access.
+      429:
+        description: The client used all of it's request quota for the current period.
+      500:
+        description: An error ocurred, see the specific message (Only if it is a WSDL endpoint).
+      503:
+        description: Contracts Information Unreachable.
 
-/CreateCustomer:
+/customer:
+  is: [client-id-required]
   post:
     body:
       application/json:
@@ -21,13 +30,99 @@ title: Harpia Cloud Challenge
         body:
           application/json:
             example:
-              message:  Customeradded (but not really)
+              !include examples/CreateCustomerResponse.json
 
-/TrackOrder/{orderId}:
+  /{id}:
+    is: [client-id-required]
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              example:
+                !include examples/CreateCustomer.json
+
+  /update/{idCustomer}:
+    is: [client-id-required]
+    put:
+      body:
+        application/json:
+          examples:
+            input: !include examples/UpdateCustomer.json
+      responses:
+        200:
+          body:
+            application/json:
+              example:
+                !include examples/CreateCustomer.json
+
+/card:
+  is: [client-id-required]
+  post:
+    body:
+      application/json:
+        examples:
+          input: !include examples/CreateCard.json
+    responses:
+      201:
+        body:
+          application/json:
+            example:
+              !include examples/CreateCardResponse.json
+
+  /{id}:
+    is: [client-id-required]
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              example:
+                !include examples/CreateCard.json
+  /update-card/{cardId}:
+    is: [client-id-required]
+    put:
+      body:
+        application/json:
+          examples:
+            input: !include examples/UpdateCard.json
+      responses:
+        200:
+          body:
+            application/json:
+              example:
+                !include examples/CreateCardResponse.json
+
+/list-inventory:
+  is: [client-id-required]
   get:
     responses:
       200:
         body:
           application/json:
             example:
-              !include /examples/TrackOrder.json
+              !include /examples/ListInventory.json
+
+/order-t-shirt:
+  is: [client-id-required]
+  post:
+    body:
+      application/json:
+        examples:
+          input: !include examples/CreateTShirt.json
+    responses:
+      201:
+        body:
+          application/json:
+            example:
+              !include examples/CreateTShirtResponse.json
+
+/track-order/{orderId}:
+  is: [client-id-required]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+              !include /examples/TrackOrder.json   

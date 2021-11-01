@@ -1,6 +1,6 @@
 {
-    "productCode": "100",
-    "size": "M",
-    "description": "T-shirt with logo",
-    "count": "100"
+	"orderId":1,
+	"status":"String",
+	"productCode":1,
+	"size":"String"
 }

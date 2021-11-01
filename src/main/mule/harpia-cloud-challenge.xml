@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
     <http:listener-config name="harpia-cloud-challenge-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
@@ -123,14 +124,36 @@ output application/json
             </on-error-propagate>
         </error-handler>
     </flow>
-    <flow name="get:\ListInventory:harpia-cloud-challenge-config">
-		<flow-ref doc:name="implementationListInventory" doc:id="fda35e1e-3dec-42be-bb61-1fcebd1fc1f6" name="implementationListInventory"/>
+    <flow name="put:\card\update-card\(cardId):application\json:harpia-cloud-challenge-config">
+        <remove-variable doc:name="cardId" doc:id="0f91dfe1-66c4-4356-bc0e-e386043b05e7" variableName="#[attributes.uriParams.'cardId']"/>
+		<flow-ref doc:name="implementationUpdateCard" doc:id="ff930a1e-4993-4c92-b88e-4090afce851b" name="implementationUpdateCard"/>
     </flow>
-    <flow name="get:\TrackOrder\(orderId):harpia-cloud-challenge-config">
-        <set-variable value="#[attributes.uriParams.'orderId']" doc:name="orderId" doc:id="6e7fe316-0177-4a87-9b7f-9dea73841a7c" variableName="orderId"/>
-		<flow-ref doc:name="implementationTrackOrder" doc:id="165b3da1-f0fe-4b6c-a917-0614044695e7" name="implementationTrackOrder"/>
+    <flow name="put:\customer\update\(idCustomer):application\json:harpia-cloud-challenge-config">
+        <set-variable value="#[attributes.uriParams.'idCustomer']" doc:name="idCustomer" doc:id="af01e86b-a301-4144-8e73-5481320df59c" variableName="idCustomer"/>
+		<flow-ref doc:name="implementationUpdateCustomer" doc:id="6fdf9d4e-7fdf-417a-a9e1-eb9daf7bcf5e" name="implementationUpdateCustomer"/>
     </flow>
-    <flow name="post:\CreateCustomer:application\json:harpia-cloud-challenge-config">
-		<flow-ref doc:name="implementationCreateCustomer" doc:id="c8b7cbd3-6014-4bda-920b-f0b15e8f7103" name="implementationCreateCustomer"/>
+    <flow name="get:\list-inventory:harpia-cloud-challenge-config">
+		<flow-ref doc:name="implementationListInventory" doc:id="93dbb8a4-a783-4e34-a6f3-aaec585535f8" name="implementationListInventory"/>
+    </flow>
+    <flow name="get:\track-order\(orderId):harpia-cloud-challenge-config">
+        <set-variable value="#[attributes.uriParams.'orderId']" doc:name="orderId" doc:id="671e63dd-a398-44bd-b191-ee2d425e47e2" variableName="orderId"/>
+		<flow-ref doc:name="implementationTrackOrder" doc:id="3324baac-160d-4d3e-b75f-4633e658eaf8" name="implementationTrackOrder"/>
+    </flow>
+    <flow name="get:\card\(id):harpia-cloud-challenge-config">
+        <set-variable value="#[attributes.uriParams.'id']" doc:name="idCard" doc:id="7842e0fb-dc6b-402e-9e5c-44916eaee457" variableName="id"/>
+		<flow-ref doc:name="implementationGetCard" doc:id="caa120f3-4240-4ff7-b427-7e5ba4afa1ff" name="implementationGetCard"/>
+    </flow>
+    <flow name="get:\customer\(id):harpia-cloud-challenge-config">
+        <set-variable value="#[attributes.uriParams.'id']" doc:name="idCustomer" doc:id="f2ce89f9-07f9-4e9a-afe4-1c5aa3478586" variableName="id"/>
+		<flow-ref doc:name="implementationGetCustomer" doc:id="8e1e70a2-404a-4e22-bc6b-161b1c03dcd0" name="implementationGetCustomer"/>
+    </flow>
+    <flow name="post:\card:application\json:harpia-cloud-challenge-config">
+		<flow-ref doc:name="implementationCreateCard" doc:id="82bf090a-c02b-4294-9698-70b5a2069b08" name="implementationCreateCard"/>
+    </flow>
+    <flow name="post:\customer:application\json:harpia-cloud-challenge-config">
+		<flow-ref doc:name="implementationCreateCustomer" doc:id="fe4ffba4-fe18-4d48-a255-7d215c0f8e8d" name="implementationCreateCustomer"/>
+    </flow>
+    <flow name="post:\order-t-shirt:application\json:harpia-cloud-challenge-config">
+		<flow-ref doc:name="implementationOrderTShirt" doc:id="cf694649-9c25-48b0-aa0b-4e79b4e754e6" name="implementationOrderTShirt"/>
     </flow>
 </mule>
